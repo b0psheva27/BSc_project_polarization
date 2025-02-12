@@ -24,7 +24,7 @@ def label_messages(file_path):
                 print("Invalid label. Please choose 'for', 'against', or 'neutral'.")
 
     # Save the updated dataframe to the CSV
-    df.to_csv('annotated_df_dara', index=False)
+    df.to_csv('annotated_df.csv', index=False)
     print("Labels have been saved to the CSV.")
 
 # Example usage:
