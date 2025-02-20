@@ -5,16 +5,21 @@ from sklearn.metrics import classification_report
 import pandas as pd
 
 # Step 1: Load and prepare the dataset
-dataset = load_dataset("csv", data_files="annotated/annotated_data.csv")
+# getting the data 
+from datasets import load_dataset
+dataset = load_dataset('csv', data_files={'train': 'annotated/annotated_train_data.csv', 'test': 'annotated/annotated_test_data.csv'})
+
+# dataset = load_dataset("csv", data_files="annotated/annotated_train_data.csv")
 dataset = dataset.rename_column("annotated_stance", "label")
 dataset = dataset.rename_column("w", "text")
-dataset = dataset.remove_columns(['Column1', 'Topic', 'Name'])
-
+dataset = dataset.remove_columns(['Column1', 'Topic', 'Name', "Unnamed: 0"])
 train_dataset = dataset["train"]
+test_dataset = dataset["test"]
 
-# Map labels
+# map labels 
 label_map = {"for": 0, "neutral": 1, "against": 2}
 train_dataset = train_dataset.map(lambda row: {"label": label_map[row["label"]]})
+test_dataset = test_dataset.map(lambda row: {"label": label_map[row["label"]]})
 
 # Step 2: Load the SetFit model
 model = SetFitModel.from_pretrained("BAAI/bge-small-en-v1.5")
@@ -30,6 +35,7 @@ trainer = Trainer(
     model=model,
     args=args,
     train_dataset=train_dataset,
+    eval_dataset=test_dataset,
 )
 
 # Step 5: Train the model
@@ -40,7 +46,7 @@ trainer.train()
 trainer.evaluate(test_dataset)
 
 # Step 6: Make predictions on the training dataset
-# predictions = trainer.predict(train_dataset)
+predictions = trainer.model.predict(test_dataset)
 
 # # Step 7: Save predictions
 # predicted_labels = predictions.predictions.argmax(axis=1)
