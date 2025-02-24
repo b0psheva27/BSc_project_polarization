@@ -25,7 +25,7 @@ test_dataset = test_dataset.map(lambda row: {"label": label_map[row["label"]]})
 
 
 # Step 2: Load the SetFit model
-model = SetFitModel.from_pretrained("BAAI/bge-small-en-v1.5")
+model = SetFitModel.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
 
 # Step 3: Define training arguments
 args = TrainingArguments(
