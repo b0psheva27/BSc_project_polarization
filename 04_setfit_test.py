@@ -15,17 +15,24 @@ test_dataset = dataset["test"]
 model.labels = ["negative", "positive"]
 
 args = TrainingArguments(
-    batch_size=32,
-    num_epochs=10,
+    batch_size=4,
+    num_epochs=(1,16),
 )
 
+# Step 4: Initialize the trainer
 trainer = Trainer(
     model=model,
     args=args,
     train_dataset=train_dataset,
+    eval_dataset=test_dataset,
 )
 
+print("starting training")
+# Step 5: Train the model
 trainer.train()
+print("training finished")
+
+# Step 7: evaluate performance
 
 metrics = trainer.evaluate(test_dataset)
 
