@@ -51,6 +51,12 @@ system_prompt = """You are an expert in detecting stances in online discussions.
     User: "This issue is complicated, and I see both sides of the argument."
     Stance: N
 
+    User: "Im in favor of all abortions, you misunderstand. I dont want any legal restrictions on abortions.
+    Stance: F
+
+    User: "What about the child? Does it have no rights? It is only there due to your selfish actions and should not be killed because you do not want it there."
+    Stance: A 
+
     Now classify the following message:"""
 for message in reddit_messages: 
    messages = [
@@ -106,6 +112,19 @@ for message in reddit_messages:
    row_df = pd.DataFrame([token_probs_dict])
    prob_stance_df = pd.concat([prob_stance_df, row_df], ignore_index=True)
 
+   # Clear cache 
+   torch.cuda.empty_cache()
+
 print(prob_stance_df)
 prob_stance_df.to_csv("output/llama_probabilities.csv", index=False)
+
+# getting the accuracy 
+prob_stance_df['stance'] = prob_stance_df[['A','F', "N"]].idxmax(axis=1)
+dict_labels = {"A": "against", "F": "for", "N": "neutral"}
+prob_stance_df["stance"] = prob_stance_df["stance"].map(dict_labels)
+matching_rows = (prob_stance_df["stance"]==test_dataset["label"]).sum()
+accuracy = matching_rows/test_dataset.num_rows
+print("saving accuracy")
+df_metrics = pd.DataFrame([accuracy])
+df_metrics.to_csv("output/llama_accuracy.csv", index=False)
 
