@@ -129,7 +129,7 @@ df_metrics = pd.DataFrame([accuracy])
 df_metrics.to_csv("output/llama_accuracy.csv", index=False)
 
 #confusion matrix
-conf_matrix = confusion_matrix(test_dataset["label"], prob_stance_df["stance"])
+conf_matrix = confusion_matrix(test_dataset["label"], prob_stance_df["stance"], labels=['for', 'against', 'neutral'])
 print(conf_matrix)
 
 #logging prompt, accuracy and confusion matrix
