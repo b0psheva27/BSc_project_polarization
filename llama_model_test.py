@@ -2,7 +2,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from huggingface_hub import login
 import torch 
 from datasets import load_dataset
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, confusion_matrix
 import pandas as pd
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -127,4 +127,16 @@ accuracy = matching_rows/test_dataset.num_rows
 print("saving accuracy")
 df_metrics = pd.DataFrame([accuracy])
 df_metrics.to_csv("output/llama_accuracy.csv", index=False)
+
+#confusion matrix
+conf_matrix = confusion_matrix(test_dataset["label"], prob_stance_df["stance"])
+print(conf_matrix)
+
+#logging prompt, accuracy and confusion matrix
+with open("classification_log.txt", "a") as file:
+    file.write(f"Prompt: {system_prompt}\n")
+    file.write(f"Accuracy: {accuracy}\n")
+    file.write(f"Confusion Matrix:\n{conf_matrix}\n")
+    file.write("-" * 40 + "\n")  # Separator for readability
+
 
