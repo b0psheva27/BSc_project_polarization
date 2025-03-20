@@ -21,7 +21,7 @@ topic_model_fitted = topic_model_fitted.reduce_topics(messages_list, nr_topics=1
 
 # get info on topics (names, important words, representative reddit message/document) !!!before reclustering
 topic_info = topic_model_fitted.get_topic_info() #topics with their indeces and repr words
-topic_info.to_csv("output/reclustered_weekly_topics_final.csv", sep="\t", index=False)
+topic_info.to_csv("output/reclustered_weekly_topics.csv", sep="\t", index=False)
 
 weekly_topics = topic_model_fitted.topics_  #topics per message
 # Store topics in the original DataFrame
@@ -32,10 +32,10 @@ topic_id_to_name = topic_info.set_index("Topic")["Name"].to_dict()
 
 # Map topic IDs to topic names in the DataFrame
 messages_df["topic_name"] = messages_df["topic"].map(topic_id_to_name)
-messages_df.to_csv("output/reclustered_weekly_data_final.csv", sep="\t", index=False)
+messages_df.to_csv("output/reclustered_weekly_data.csv", sep=",")
 
 print("Saving model...")
-topic_model_fitted.save("models/reclustered_bert_topic_model_final", serialization="safetensors", save_ctfidf=True, save_embedding_model=True)
+topic_model_fitted.save("models/reclustered_bert_topic_model", serialization="safetensors", save_ctfidf=True, save_embedding_model=True)
 print("Model saved!")
 
 print("############## Transforming new data ################")
@@ -52,10 +52,9 @@ topic_id_to_name = topic_info.set_index("Topic")["Name"].to_dict()
 
 # Map topic IDs to topic names in the DataFrame
 monthly_messages_df["topic_name"] = monthly_messages_df["topic"].map(topic_id_to_name)
-print(monthly_messages_df)
 
 print("Saving the topics per message for December 2022...")
-monthly_messages_df.to_csv("output/reclustered_monthly_data_final.csv", sep="\t", index=False)
+monthly_messages_df.to_csv("output/reclustered_monthly_data.csv", sep=",")
 # We don't save the topics with their ids and repr words/docs for the monthly data, since they are supposed to be the same as the weekly ones 
 # (the model is fitted on the weekly data only)
 
