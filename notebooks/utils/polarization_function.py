@@ -80,3 +80,14 @@ def calc_pol3(path_edgelist, path_user_scores, component):
    o = df_user_scores.set_index("nodeid")[f"{component}"].to_dict()
    print(o)
    return ge(o, {}, G)
+
+
+def calc_pol4(G, df, component):
+   '''4th version of function that takes df as argument, instead of reading opinions from a file'''
+   print(df.head())
+   print(G)
+   print(list(G.nodes())[:10])
+   o = {}
+   o = df.set_index("nodeid")[f"{component}"].to_dict()
+   print(o)
+   return ge(o, {}, G)

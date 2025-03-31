@@ -8,15 +8,27 @@ import matplotlib.pyplot as plt
 import umap
 
 
-# get the stance 
-def get_stance(row): 
-    if row["N"] == 1.0: 
+# # get the stance 
+# def get_stance(row): #old version
+#     if row["N"] == 1.0: 
+#         return 0
+#     elif row["A"] > row["F"]:
+#         return row["A"]
+#     elif row["F"] > row["A"]:
+#         return row["F"]*-1
+#     else: 
+#         return random.choice([row["A"], row["F"]])
+    
+def get_stance(row): #new version that handles case of all 0 probs
+    if row["N"] == 1.0:
+        return 0
+    elif row["N"] == row["A"] == row["F"] == 0:
         return 0
     elif row["A"] > row["F"]:
         return row["A"]
     elif row["F"] > row["A"]:
         return row["F"]*-1
-    else: 
+    else:
         return random.choice([row["A"], row["F"]])
 
 def get_avg(data, topic):
@@ -64,4 +76,33 @@ def plot_c(merged_df, pc_column, color_topic ):
         plt.xlabel('Principal component')
     plt.ylabel('Random')
     plt.title('Scatter plot of the principal component')
+    plt.show()
+
+ 
+def plot_c_subplot(merged_df, pc_column, color_topics):
+    """Function to make a subplot of scatterplots for all reduced component vs random numbers,
+      colored by stances on each of the 3 topics
+      
+      color_topics: list of column names (strings) where the stances are -> ["stance_abortion", "stance_marriage", "stance_political"]
+    """
+    num_plots = len(color_topics)
+    fig, axes = plt.subplots(1, num_plots, figsize=(5 * num_plots, 5), sharey=True)
+ 
+    if num_plots == 1:
+        axes = [axes]  # Ensure axes is iterable if there's only one plot
+ 
+    for i, (color_topic, ax) in enumerate(zip(color_topics, axes)):
+        num_users = merged_df.shape[0]
+        y_axis = np.random.rand(num_users)
+ 
+        scatter = ax.scatter(merged_df[pc_column], y_axis, c=merged_df[color_topic], cmap='coolwarm')
+        cbar = fig.colorbar(scatter, ax=ax, orientation='vertical', fraction=0.02, pad=0.04)
+        cbar.set_label(f'{color_topic} stance')
+ 
+        ax.set_xlabel('UMAP component' if pc_column == "umap_component" else 'Principal component')
+        if i == 0:
+            ax.set_ylabel('Random')  # Label only on first plot
+        ax.set_title(f'Scatter plot - {color_topic}')
+ 
+    plt.tight_layout()
     plt.show()
