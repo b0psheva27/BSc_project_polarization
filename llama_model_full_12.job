@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#SBATCH --job-name=llama_model_full_month     # Job name
+#SBATCH --output=job.%j.out      # Name of output file (%j expands to jobId)
+#SBATCH --cpus-per-task=48        # Schedule one core
+#SBATCH --time=02:00:00          # Run time (hh:mm:ss) - run for one hour max
+#SBATCH --gres=gpu:h100:1
+#SBATCH --mail-type=BEGIN,FAIL,END
+
+module load Anaconda3
+
+source activate /home/jnye/.conda/envs/bach_env
+
+echo "Activated environment: $CONDA_DEFAULT_ENV"
+
+cd bach_proj
+
+python3 llama_model_full_12.py
+
