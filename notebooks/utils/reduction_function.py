@@ -42,21 +42,21 @@ def merge_datasets(data1, data2, data3):
     return merged_df 
 
 # PCA 
-def apply_pca(merged_df, colume_list, new_columns): 
+def apply_pca(merged_df, column_list, new_columns): 
     # scaler
     scaler = pre.StandardScaler()
-    merged_df[new_columns] = scaler.fit_transform(merged_df[colume_list])
+    merged_df[new_columns] = scaler.fit_transform(merged_df[column_list])
 
     # pca 
     pca = PCA(n_components=1)
     merged_df["pca_component"] = pca.fit_transform(merged_df[new_columns])
     return merged_df
 
-def apply_pca2(merged_df, colume_list, n_components, new_columns): 
+def apply_pca2(merged_df, column_list, n_components, new_columns): 
     '''Applies PCA to a df and reduces the vector to 2D'''
     # scaler
     scaler = pre.StandardScaler()
-    merged_df[new_columns] = scaler.fit_transform(merged_df[colume_list])
+    merged_df[new_columns] = scaler.fit_transform(merged_df[column_list])
 
     # pca 
     pca = PCA(n_components=n_components)
