@@ -145,7 +145,7 @@ def plot_c_subplot2D(merged_df, pc_column1, pc_column2, color_topics):
     for i, (color_topics, ax) in enumerate(zip(color_topics, axes)):
         num_users = merged_df.shape[0]
  
-        scatter = ax.scatter(merged_df[pc_column1], merged_df[pc_column2], c=merged_df[color_topics], cmap='coolwarm')
+        scatter = ax.scatter(merged_df[pc_column1], merged_df[pc_column2], c=merged_df[color_topics], cmap='coolwarm', s=10)
         cbar = fig.colorbar(scatter, ax=ax, orientation='vertical', fraction=0.02, pad=0.04)
         cbar.set_label(f'{color_topics} stance')
  
