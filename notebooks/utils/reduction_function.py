@@ -52,6 +52,16 @@ def apply_pca(merged_df, column_list, new_columns):
     merged_df["pca_component"] = pca.fit_transform(merged_df[new_columns])
     return merged_df
 
+def apply_pca_unscaled(merged_df, column_list): 
+    # scaler
+    # scaler = pre.StandardScaler()
+    # merged_df[new_columns] = scaler.fit_transform(merged_df[column_list])
+
+    # pca 
+    pca = PCA(n_components=1)
+    merged_df["pca_component"] = pca.fit_transform(merged_df[column_list])
+    return merged_df
+
 def apply_pca2(merged_df, column_list, n_components, new_columns): 
     '''Applies PCA to a df and reduces the vector to 2D'''
     # scaler
@@ -61,6 +71,17 @@ def apply_pca2(merged_df, column_list, n_components, new_columns):
     # pca 
     pca = PCA(n_components=n_components)
     merged_df["pca_component1"], merged_df["pca_component2"] = zip(*pca.fit_transform(merged_df[new_columns]))
+    return merged_df
+
+def apply_pca2_unscaled(merged_df, column_list, n_components): 
+    '''Applies PCA to a df and reduces the vector to 2D'''
+    # scaler
+    # scaler = pre.StandardScaler()
+    # merged_df[new_columns] = scaler.fit_transform(merged_df[column_list])
+
+    # pca 
+    pca = PCA(n_components=n_components)
+    merged_df["pca_component1"], merged_df["pca_component2"] = zip(*pca.fit_transform(merged_df[column_list]))
     return merged_df
 
 # UMAP 
@@ -74,6 +95,16 @@ def apply_umap(merged_df, column_list, new_columns):
     merged_df["umap_component"] = reducer_1D.fit_transform(merged_df[new_columns])
     return merged_df
 
+def apply_umap_unscaled(merged_df, column_list):
+    # scaler 
+    # scaler = pre.StandardScaler()
+    # merged_df[new_columns] = scaler.fit_transform(merged_df[column_list])
+
+    # umap 
+    reducer_1D = umap.UMAP(n_components=1, random_state=42)
+    merged_df["umap_component"] = reducer_1D.fit_transform(merged_df[column_list])
+    return merged_df
+
 def apply_umap2(merged_df, column_list, n_components, new_columns):
     '''Applies UMAP to a df and reduces the vector to 2D'''
     # scaler 
@@ -85,6 +116,16 @@ def apply_umap2(merged_df, column_list, n_components, new_columns):
     merged_df["umap_component1"], merged_df["umap_component2"] = zip(*reducer.fit_transform(merged_df[new_columns]))
     return merged_df
 
+def apply_umap2_unscaled(merged_df, column_list, n_components):
+    '''Applies UMAP to a df and reduces the vector to 2D'''
+    # scaler 
+    # scaler = pre.StandardScaler()
+    # merged_df[new_columns] = scaler.fit_transform(merged_df[column_list])
+
+    # umap 
+    reducer = umap.UMAP(n_components=n_components, random_state=42)
+    merged_df["umap_component1"], merged_df["umap_component2"] = zip(*reducer.fit_transform(merged_df[column_list]))
+    return merged_df
 # Plots 
 def plot_c(merged_df, pc_column, color_topic ): 
     num_users = merged_df.shape[0]
