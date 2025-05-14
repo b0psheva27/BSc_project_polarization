@@ -21,7 +21,7 @@ reddit_messages = test_dataset["text"]
 print("Loaded data")
 
 # Replace with your Hugging Face access token
-access_token = "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"
+access_token = ""
 
 # Log in using the token
 login(access_token)
